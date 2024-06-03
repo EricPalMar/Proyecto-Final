@@ -502,7 +502,7 @@ const accesoriosGimnasio = [
   ];
   
 
-//Formulario y tabla
+//Función para renderizar la tabla de productos
 
 function renderizarTablaProductos() {
   const tablaProductos = document.getElementById("tabla-productos").querySelector("tbody");
@@ -520,18 +520,22 @@ function renderizarTablaProductos() {
       <td>${producto.codigo}</td>
       <td><img src="${producto.imagen}" alt="${producto.nombre}" style="width: 50px; height: auto;"></td>
     `;
-    tablaProductos.appendChild(fila);
+    tablaProductos.appendChild(fila); // Agrega la fila a la tabla
   });
 
 }
 
+// Evento que se ejecuta cuando el contenido del DOM ha sido cargado
+
 document.addEventListener("DOMContentLoaded", () => {
-  renderizarTablaProductos();
+  renderizarTablaProductos(); // Llama a la función para renderizar la tabla de productos
 
   const registroForm = document.getElementById("registro-form");
   registroForm.addEventListener("submit", (event) => {
     event.preventDefault();
     
+    // Crear un nuevo producto con los valores del formulario 
+
     const nuevoProducto = {
       nombre: document.getElementById("nombre").value,
       categoria: document.getElementById("categoria").value,
@@ -543,7 +547,7 @@ document.addEventListener("DOMContentLoaded", () => {
       imagen: URL.createObjectURL(document.getElementById("imagen").files[0]) // Obtener la URL de la imagen seleccionada
     };
 
-    accesoriosGimnasio.push(nuevoProducto);
+    accesoriosGimnasio.push(nuevoProducto); // Agrega el nuevo producto al array
     alert('Producto registrado correctamente.');
     renderizarTablaProductos();
     registroForm.reset();
@@ -551,22 +555,24 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-//paginacion productos
+// Paginación de productos
 
 const productsPerPage = 15;
 let currentPage = 1;
 
+// Renderiza los productos de la página específica
+
 function renderProducts(page) {
   const start = (page - 1) * productsPerPage;
   const end = start + productsPerPage;
-  const paginatedProducts = accesoriosGimnasio.slice(start, end);
+  const paginatedProducts = accesoriosGimnasio.slice(start, end); // Productos de la página actual
 
   const productList = document.getElementById('product-list');
   if (!productList) {
       console.error("No se pudo encontrar el elemento con id 'product-list'");
       return;
   }
-  productList.innerHTML = '';
+  productList.innerHTML = ''; // Limpia la lista de productos
 
   paginatedProducts.forEach(product => {
       const productCard = document.createElement('div');
@@ -583,9 +589,11 @@ function renderProducts(page) {
           <p><strong>Código:</strong> ${product.codigo}</p>
       `;
 
-      productList.appendChild(productCard);
+      productList.appendChild(productCard); // Agrega la tarjeta del producto a la lista
   });
 }
+
+//renderizar los botones de paginación
 
 function renderPagination() {
   const totalPages = Math.ceil(accesoriosGimnasio.length / productsPerPage);
@@ -602,12 +610,12 @@ function renderPagination() {
       button.classList.add('page-button'); 
 
       button.addEventListener('click', () => {
-          currentPage = i; // Actualiza currentPage al hacer clic en el botón
+          currentPage = i; // Actualiza la página actual al hacer clic en un botón
           renderProducts(currentPage);
           updateActiveButton();
       });
 
-      pagination.appendChild(button);
+      pagination.appendChild(button); // Agrega el botón de página a la paginación
   }
 
   const nextButton = document.createElement('button');
@@ -622,18 +630,22 @@ function renderPagination() {
       }
   });
 
-  pagination.appendChild(nextButton);
+  pagination.appendChild(nextButton); // Agrega el botón "Siguiente" a la paginación
 }
+
+// Función para actualizar el botón activo
 
 function updateActiveButton() {
   const buttons = document.querySelectorAll('.page-button');
   buttons.forEach(button => {
       button.classList.remove('active');
       if (parseInt(button.textContent) === currentPage) {
-          button.classList.add('active');
+          button.classList.add('active'); // Marca el botón correspondiente como activo
       }
   });
 }
+
+// Evento que se ejecuta cuando el contenido del DOM ha sido cargado
 
 document.addEventListener('DOMContentLoaded', () => {
   if (!accesoriosGimnasio || accesoriosGimnasio.length === 0) {
@@ -668,7 +680,7 @@ function filtrarProductos(categoria, precioMin, precioMax) {
 // Función para renderizar los resultados de la búsqueda
 function renderizarResultadosBusqueda(productos) {
   const listaResultados = document.getElementById('lista-resultados');
-  listaResultados.innerHTML = '';
+  listaResultados.innerHTML = ''; // Limpia la lista de resultados
 
   if (productos.length === 0) {
     listaResultados.innerHTML = '<p>No se encontraron productos.</p>';
@@ -689,6 +701,6 @@ function renderizarResultadosBusqueda(productos) {
       <p><strong>Material:</strong> ${producto.material}</p>
       <p><strong>Código:</strong> ${producto.codigo}</p>
     `;
-    listaResultados.appendChild(itemLista);
+    listaResultados.appendChild(itemLista); // Agrega el producto a la lista de resultados
   });
 }
